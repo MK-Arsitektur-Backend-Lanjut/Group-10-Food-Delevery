@@ -1,8 +1,5 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Routing\Controller as BaseController;
 use OpenApi\Annotations as OA;
 
 /**
@@ -12,7 +9,3 @@ use OpenApi\Annotations as OA;
  *     description="API untuk manajemen order"
  * )
  */
-class Controller extends BaseController
-{
-    //
-}
