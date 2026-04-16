@@ -51,7 +51,7 @@ class RestaurantController extends Controller
         tags: ['Restaurants'],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(ref: '#/components/schemas/Restaurant')
+            content: new OA\JsonContent(ref: '#/components/schemas/StoreRestaurantRequest')
         ),
         responses: [
             new OA\Response(response: 201, description: 'Restaurant created successfully')
@@ -98,7 +98,7 @@ class RestaurantController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(ref: '#/components/schemas/Restaurant')
+            content: new OA\JsonContent(ref: '#/components/schemas/UpdateRestaurantRequest')
         ),
         responses: [
             new OA\Response(response: 200, description: 'Restaurant updated successfully')
@@ -123,13 +123,7 @@ class RestaurantController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'is_open', type: 'boolean', example: true),
-                    new OA\Property(property: 'reason', type: 'string', example: 'Morning prep'),
-                    new OA\Property(property: 'changed_by', type: 'string', example: 'Admin')
-                ]
-            )
+            content: new OA\JsonContent(ref: '#/components/schemas/UpdateRestaurantOperationalStatusRequest')
         ),
         responses: [
             new OA\Response(response: 200, description: 'Restaurant operational status updated successfully')

@@ -125,7 +125,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MenuCategory"
+                                "$ref": "#/components/schemas/StoreMenuCategoryRequest"
                             }
                         }
                     }
@@ -181,7 +181,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MenuCategory"
+                                "$ref": "#/components/schemas/UpdateMenuCategoryRequest"
                             }
                         }
                     }
@@ -259,7 +259,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MenuItem"
+                                "$ref": "#/components/schemas/StoreMenuItemRequest"
                             }
                         }
                     }
@@ -315,7 +315,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/MenuItem"
+                                "$ref": "#/components/schemas/UpdateMenuItemRequest"
                             }
                         }
                     }
@@ -371,13 +371,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "is_available": {
-                                        "type": "boolean",
-                                        "example": false
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/UpdateMenuAvailabilityRequest"
                             }
                         }
                     }
@@ -413,7 +407,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Restaurant"
+                                "$ref": "#/components/schemas/StoreRestaurantRequest"
                             }
                         }
                     }
@@ -469,7 +463,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Restaurant"
+                                "$ref": "#/components/schemas/UpdateRestaurantRequest"
                             }
                         }
                     }
@@ -503,21 +497,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "properties": {
-                                    "is_open": {
-                                        "type": "boolean",
-                                        "example": true
-                                    },
-                                    "reason": {
-                                        "type": "string",
-                                        "example": "Morning prep"
-                                    },
-                                    "changed_by": {
-                                        "type": "string",
-                                        "example": "Admin"
-                                    }
-                                },
-                                "type": "object"
+                                "$ref": "#/components/schemas/UpdateRestaurantOperationalStatusRequest"
                             }
                         }
                     }
@@ -641,6 +621,267 @@
                             },
                             "type": "object"
                         }
+                    }
+                },
+                "type": "object"
+            },
+            "StoreRestaurantRequest": {
+                "required": [
+                    "name",
+                    "address"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Warung Nusantara Baru"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi restoran",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Jalan Merdeka No. 1"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "08123456789",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active",
+                        "nullable": true
+                    },
+                    "is_open": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    },
+                    "open_time": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "08:00",
+                        "nullable": true
+                    },
+                    "close_time": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "22:00",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateRestaurantRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Warung Nusantara Updated"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Deskripsi restoran",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Jalan Merdeka No. 1"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "08123456789",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active",
+                        "nullable": true
+                    },
+                    "is_open": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    },
+                    "open_time": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "08:00",
+                        "nullable": true
+                    },
+                    "close_time": {
+                        "type": "string",
+                        "format": "time",
+                        "example": "22:00",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateRestaurantOperationalStatusRequest": {
+                "required": [
+                    "is_open"
+                ],
+                "properties": {
+                    "is_open": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "reason": {
+                        "type": "string",
+                        "example": "Jam operasional",
+                        "nullable": true
+                    },
+                    "changed_by": {
+                        "type": "string",
+                        "example": "admin",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreMenuCategoryRequest": {
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Minuman Dingin"
+                    },
+                    "sort_order": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateMenuCategoryRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Minuman Dingin updated"
+                    },
+                    "sort_order": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreMenuItemRequest": {
+                "required": [
+                    "name",
+                    "price"
+                ],
+                "properties": {
+                    "menu_category_id": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Es Teh Manis"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Es teh manis segar",
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 5000
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    },
+                    "is_available": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    },
+                    "prep_time_minutes": {
+                        "type": "integer",
+                        "example": 5,
+                        "nullable": true
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "example": "http://example.com/image.jpg",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateMenuItemRequest": {
+                "properties": {
+                    "menu_category_id": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Es Teh Manis Updated"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Es teh manis segar",
+                        "nullable": true
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 5000
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    },
+                    "is_available": {
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    },
+                    "prep_time_minutes": {
+                        "type": "integer",
+                        "example": 5,
+                        "nullable": true
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "example": "http://example.com/image.jpg",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateMenuAvailabilityRequest": {
+                "required": [
+                    "is_available"
+                ],
+                "properties": {
+                    "is_available": {
+                        "type": "boolean",
+                        "example": false
                     }
                 },
                 "type": "object"

@@ -57,7 +57,7 @@ class MenuItemController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(ref: '#/components/schemas/MenuItem')
+            content: new OA\JsonContent(ref: '#/components/schemas/StoreMenuItemRequest')
         ),
         responses: [
             new OA\Response(response: 201, description: 'Menu item created successfully')
@@ -104,7 +104,7 @@ class MenuItemController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(ref: '#/components/schemas/MenuItem')
+            content: new OA\JsonContent(ref: '#/components/schemas/UpdateMenuItemRequest')
         ),
         responses: [
             new OA\Response(response: 200, description: 'Successful operation')
@@ -129,11 +129,7 @@ class MenuItemController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(
-                properties: [
-                    new OA\Property(property: 'is_available', type: 'boolean', example: false)
-                ]
-            )
+            content: new OA\JsonContent(ref: '#/components/schemas/UpdateMenuAvailabilityRequest')
         ),
         responses: [
             new OA\Response(response: 200, description: 'Menu item availability updated successfully')

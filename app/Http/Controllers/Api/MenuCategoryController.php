@@ -48,7 +48,7 @@ class MenuCategoryController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(ref: '#/components/schemas/MenuCategory')
+            content: new OA\JsonContent(ref: '#/components/schemas/StoreMenuCategoryRequest')
         ),
         responses: [
             new OA\Response(response: 201, description: 'Menu category created successfully')
@@ -95,7 +95,7 @@ class MenuCategoryController extends Controller
         ],
         requestBody: new OA\RequestBody(
             required: true,
-            content: new OA\JsonContent(ref: '#/components/schemas/MenuCategory')
+            content: new OA\JsonContent(ref: '#/components/schemas/UpdateMenuCategoryRequest')
         ),
         responses: [
             new OA\Response(response: 200, description: 'Successful operation')
