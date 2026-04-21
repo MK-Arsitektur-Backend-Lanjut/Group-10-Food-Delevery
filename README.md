@@ -1,58 +1,75 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Food Delivery System (Module 1: Restaurant & Menu)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
+This repository contains the foundational **Restaurant & Menu Module** built with Laravel following SOLID principles and the Repository Pattern. It strictly handles restaurant profiles, operability, menu categorization, item management, and batch-processing order validation endpoints designed to integrate cleanly with future modules (like the Order Module).
 
-## About Laravel
+### 🚀 Technical Stack
+- **Framework:** Laravel 13.x (PHP 8.3+)
+- **Architecture Pattern:** Repository-Service Pattern
+- **Testing:** Pest (Feature Testing)
+- **Database:** MySQL 8.0
+- **Containerization:** Docker & Docker Compose
+- **Documentation:** OpenAPI (via `darkaonline/l5-swagger`)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Architecture Flow
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Routing:** `routes/api.php` handles `/api/v1` and internal endpoints.
+2. **Controllers:** Keep HTTP logic isolated, parsing requests into validated DTOs array (`FormRequests`) and passing downward. Formats responses using `ApiResponseHelper` and `ApiResources`.
+3. **Services:** Core business logic (Idempotent updates, validation rules, batch fetching).
+4. **Repositories:** Abstraction layer separating Eloquent Logic/Database logic away from Business logic. Avoids `N+1` queries using optimal indexing and batching.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🔗 Key Endpoints
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Resource | Endpoints | Description |
+|---|---|---|
+| **Restaurant** | `GET /api/v1/restaurants` <br> `POST /api/v1/restaurants` <br> `GET /api/v1/restaurants/{id}` <br> `PATCH /api/v1/restaurants/{id}/operational-status` | Manage restaurants and toggle open/closed status. |
+| **Category** | `GET /api/v1/restaurants/{rest}/categories` <br> `POST ...` | Manage menu categories. |
+| **Menu Items** | `GET /api/v1/restaurants/{rest}/menus` <br> `PATCH /api/v1/menus/{id}/availability` | Add items and toggle availability constraints. |
+| **Internal (Orders)** | `POST /api/v1/internal/order-items/validate` | Validates duplicate items, closed states, item availability, and returns canonical data payloads. |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 🛠 Setup & Commands
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+To quickly bootstrap and test this setup with Docker:
 
 ```bash
-composer require laravel/boost --dev
+# 1. Install dependencies and Swagger package
+composer install
+composer require "darkaonline/l5-swagger"
 
-php artisan boost:install
+# 2. Setup env (make sure to set connection to MySQL or DB container)
+cp .env.example .env
+php artisan key:generate
+
+# 3. Spin up local container stack
+docker compose up -d --build
+
+# 4. Migrate and Seed dummy data (30+ Restaurants, Categories, Items)
+# Use docker exec if running via containers: docker compose exec app php artisan migrate
+php artisan migrate --seed
+
+# 5. Run Tests
+php artisan test
+
+# 6. Generate Swagger Docs
+php artisan l5-swagger:generate
+
+# 7. Check Routes
+php artisan route:list
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Readiness Checklist
+- [x] Restaurant CRUD & Operational logic implemented
+- [x] Menu Category mapping implemented
+- [x] Menu Item manipulation & Status flag isolated
+- [x] Order Validation batch query optimized (no N+1)
+- [x] Response structure standardized
+- [x] Full Dockerization provided
+- [x] Swagger docs layout initialized
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+*Modul 1 siap diintegrasikan dengan Modul 2 & 3.*
