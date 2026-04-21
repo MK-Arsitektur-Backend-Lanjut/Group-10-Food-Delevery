@@ -123,6 +123,9 @@
 <script src="{{ l5_swagger_asset($documentation, 'swagger-ui-standalone-preset.js') }}"></script>
 <script>
     window.onload = function() {
+        // Build a system
+       
+
         const urls = [];
 
         @foreach($urlsToDocs as $title => $url)
@@ -132,6 +135,7 @@
         // Build a system
         const ui = SwaggerUIBundle({
             dom_id: '#swagger-ui',
+            url: "{!! $urlToDocs !!}",
             urls: urls,
             "urls.primaryName": "{{ $documentationTitle }}",
             operationsSorter: {!! isset($operationsSorter) ? '"' . $operationsSorter . '"' : 'null' !!},

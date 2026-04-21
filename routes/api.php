@@ -4,7 +4,12 @@ use App\Http\Controllers\Api\InternalIntegrationController;
 use App\Http\Controllers\Api\MenuCategoryController;
 use App\Http\Controllers\Api\MenuItemController;
 use App\Http\Controllers\Api\RestaurantController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/orders', [OrderController::class, 'store']);
+Route::get('/orders/{id}', [OrderController::class, 'show']);
+Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
 
 Route::prefix('v1')->group(function () {
     // Restaurants

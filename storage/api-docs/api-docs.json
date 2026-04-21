@@ -1,6 +1,35 @@
 {
     "openapi": "3.0.0",
     "info": {
+        "title": "Order API",
+        "description": "API untuk manajemen order",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/orders": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create Order",
+                "operationId": "d690d6834318e9b064df441e854de8b9",
+                "responses": {
+                    "200": {
+                        "description": "Order created"
+                    }
+                }
+            }
+        },
+        "/api/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get Order by ID",
+                "operationId": "c29621029e70f65247909d3e09031118",
+                "parameters": [
+                    {
+                        "name": "id",
         "title": "Food Delivery API",
         "description": "Food Delivery API Documentation",
         "version": "1.0.0"
@@ -438,6 +467,21 @@
                 ],
                 "responses": {
                     "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/orders/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update Order Status",
+                "operationId": "cbee5c99370628f7a4a9e10c9efcca5c",
+                "parameters": [
+                    {
+                        "name": "id",
                         "description": "Successful operation"
                     }
                 }
@@ -497,6 +541,16 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "DIMASAK"
+                                    }
+                                },
+                                "type": "object"
                                 "$ref": "#/components/schemas/UpdateRestaurantOperationalStatusRequest"
                             }
                         }
@@ -504,6 +558,16 @@
                 },
                 "responses": {
                     "200": {
+                        "description": "Updated"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Orders",
+            "description": "Orders"
                         "description": "Restaurant operational status updated successfully"
                     }
                 }
