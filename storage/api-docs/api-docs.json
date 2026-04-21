@@ -1,35 +1,6 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Order API",
-        "description": "API untuk manajemen order",
-        "version": "1.0.0"
-    },
-    "paths": {
-        "/api/orders": {
-            "post": {
-                "tags": [
-                    "Orders"
-                ],
-                "summary": "Create Order",
-                "operationId": "d690d6834318e9b064df441e854de8b9",
-                "responses": {
-                    "200": {
-                        "description": "Order created"
-                    }
-                }
-            }
-        },
-        "/api/orders/{id}": {
-            "get": {
-                "tags": [
-                    "Orders"
-                ],
-                "summary": "Get Order by ID",
-                "operationId": "c29621029e70f65247909d3e09031118",
-                "parameters": [
-                    {
-                        "name": "id",
         "title": "Food Delivery API",
         "description": "Food Delivery API Documentation",
         "version": "1.0.0"
@@ -467,21 +438,6 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success"
-                    }
-                }
-            }
-        },
-        "/api/orders/{id}/status": {
-            "patch": {
-                "tags": [
-                    "Orders"
-                ],
-                "summary": "Update Order Status",
-                "operationId": "cbee5c99370628f7a4a9e10c9efcca5c",
-                "parameters": [
-                    {
-                        "name": "id",
                         "description": "Successful operation"
                     }
                 }
@@ -541,16 +497,6 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "status"
-                                ],
-                                "properties": {
-                                    "status": {
-                                        "type": "string",
-                                        "example": "DIMASAK"
-                                    }
-                                },
-                                "type": "object"
                                 "$ref": "#/components/schemas/UpdateRestaurantOperationalStatusRequest"
                             }
                         }
@@ -558,19 +504,459 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Updated"
-                    }
-                }
-            }
-        }
-    },
-    "tags": [
-        {
-            "name": "Orders",
-            "description": "Orders"
                         "description": "Restaurant operational status updated successfully"
                     }
                 }
+            }
+        },
+        "/api/drivers": {
+            "get": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Get list of drivers",
+                "operationId": "90f1e2d7ba23baa1e136288ed235666c",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Driver"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Create a new driver",
+                "operationId": "6bdf167696d642223e0d27e88a0b4896",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreDriverRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Driver"
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/drivers/{id}": {
+            "get": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Get driver details",
+                "operationId": "1de6dd3c4dadedd666e6f9e425fd3db4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Driver"
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Update an existing driver",
+                "operationId": "de2a8f73505116569bbec3fa525db6bd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateDriverRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Driver"
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Delete a driver",
+                "operationId": "c32adc70b84b5c4d5f214e60757aaee3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/drivers/available": {
+            "get": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Get available drivers",
+                "operationId": "cd03eca28abe5b326e6e0ea68287161c",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Driver"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/drivers/{id}/history": {
+            "get": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Get driver delivery history",
+                "operationId": "2a86ad982a65dfc5ef877727ba2f80c0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DeliveryHistory"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/drivers/login": {
+            "post": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Driver Login",
+                "operationId": "4d92224ab9bed2c95c2be67479380a93",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DriverLoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/drivers/register": {
+            "post": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Driver Registration",
+                "operationId": "4f7e14ac48a56c872583a6bf09fcc9f9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DriverRegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "driver": {
+                                            "$ref": "#/components/schemas/Driver"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/orders": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create Order",
+                "operationId": "d690d6834318e9b064df441e854de8b9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreOrderRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Order created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/orders/{id}": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get Order by ID",
+                "operationId": "c29621029e70f65247909d3e09031118",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/orders/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Update Order Status",
+                "operationId": "cbee5c99370628f7a4a9e10c9efcca5c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Order"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Status tidak valid atau transisi tidak valid"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
             }
         }
     },
@@ -949,6 +1335,242 @@
                     }
                 },
                 "type": "object"
+            },
+            "Order": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "restaurant_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "driver_id": {
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "DIPESAN"
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 15000
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-21T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-21T10:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreOrderRequest": {
+                "required": [
+                    "restaurant_id"
+                ],
+                "properties": {
+                    "user_id": {
+                        "description": "Opsional, idealnya diambil dari token auth",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "restaurant_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "total_price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 15000
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateOrderStatusRequest": {
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "status": {
+                        "description": "DIPESAN, DIMASAK, DIANTAR, SELESAI",
+                        "type": "string",
+                        "example": "DIMASAK"
+                    }
+                },
+                "type": "object"
+            },
+            "Driver": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Budi Santoso"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "budi@driver.com"
+                    },
+                    "vehicle": {
+                        "type": "string",
+                        "example": "Honda Vario B 1234 XYZ"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "available"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-21T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-21T10:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreDriverRequest": {
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "vehicle",
+                    "status"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Andi Saputra"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "andi@driver.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    },
+                    "vehicle": {
+                        "type": "string",
+                        "example": "Yamaha Beat B 5678 GHI"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "available"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateDriverRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Andi Saputra"
+                    },
+                    "vehicle": {
+                        "type": "string",
+                        "example": "Yamaha Beat B 5678 GHI"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "unavailable"
+                    }
+                },
+                "type": "object"
+            },
+            "DriverLoginRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "budi@driver.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    }
+                },
+                "type": "object"
+            },
+            "DriverRegisterRequest": {
+                "required": [
+                    "name",
+                    "email",
+                    "password",
+                    "vehicle"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Cecep Kuncoro"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "cecep@driver.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    },
+                    "vehicle": {
+                        "type": "string",
+                        "example": "Suzuki NMax D 7642 TTR"
+                    }
+                },
+                "type": "object"
+            },
+            "DeliveryHistory": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "driver_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "order_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "delivered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-21T11:00:00Z"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-21T11:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-03-21T11:00:00Z"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -968,6 +1590,14 @@
         {
             "name": "Restaurants",
             "description": "Restaurants"
+        },
+        {
+            "name": "Drivers",
+            "description": "Drivers"
+        },
+        {
+            "name": "Orders",
+            "description": "Orders"
         }
     ]
 }

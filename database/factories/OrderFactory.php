@@ -19,8 +19,10 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => \App\Models\User::factory(),
-            'status' => $this->faker->randomElement(['pending', 'cooking', 'delivering', 'completed']),
-            'total' => $this->faker->randomFloat(2, 10, 100),
+            'restaurant_id' => $this->faker->numberBetween(1, 10),
+            'status' => $this->faker->randomElement(['DIPESAN', 'DIMASAK', 'DIANTAR', 'SELESAI']),
+            'total_price' => $this->faker->randomFloat(2, 15000, 150000),
+            'driver_id' => null,
         ];
     }
 }

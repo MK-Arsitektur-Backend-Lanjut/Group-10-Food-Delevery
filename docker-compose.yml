@@ -1,97 +1,51 @@
-version: '3.8'
-
-services:
-  app:
-    build: .
-    container_name: laravel_app
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/var/www
-    depends_on:
-      - db
-
-  db:
-    image: mysql:8.0
-    container_name: laravel_db
-    restart: always
-    environment:
-      MYSQL_DATABASE: order_db
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: food-platform-app
+    container_name: food-delivery-app
     ports:
       - "8000:8000"
     env_file:
       - .env
-    volumes:
-      - .:/var/www/html
-    depends_on:
-      mysql:
-        condition: service_healthy
-
-  mysql:
-    image: mysql:8.0
-    container_name: food-platform-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: food_platform
-      MYSQL_USER: food_user
-      MYSQL_PASSWORD: food_pass
-    ports:
-      - "3308:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-
-volumes:
-  mysql_data:
-    ports:
-      - "8000:8000"
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
       - DB_CONNECTION=mysql
       - DB_HOST=db
       - DB_PORT=3306
-      - DB_DATABASE=restaurant_db
+      - DB_DATABASE=food_delivery_db
       - DB_USERNAME=root
-      - DB_PASSWORD=secret
+      - DB_PASSWORD=root
       - REDIS_HOST=redis
+    volumes:
+      - .:/var/www/html
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_started
-    volumes:
-      - .:/var/www
 
   db:
     image: mysql:8.0
+    container_name: food-delivery-db
+    restart: always
     environment:
-      - MYSQL_DATABASE=restaurant_db
-      - MYSQL_ROOT_PASSWORD=secret
+      MYSQL_DATABASE: food_delivery_db
+      MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3308:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
-      timeout: 20s
-      retries: 10
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   redis:
     image: redis:alpine
+    container_name: food-delivery-redis
     ports:
       - "6380:6379"
     volumes:
