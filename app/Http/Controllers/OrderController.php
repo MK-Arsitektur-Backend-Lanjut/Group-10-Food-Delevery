@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\OrderStatusLog;
 use App\Repositories\OrderRepository;
 use Illuminate\Http\Request;
@@ -22,18 +23,41 @@ class OrderController extends Controller
         summary: 'Get all Orders (with pagination)',
         tags: ['Orders'],
         parameters: [
-            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 15))
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 15)),
         ],
         servers: [new OA\Server(url: '/')],
         responses: [
-            new OA\Response(response: 200, description: 'Success')
+            new OA\Response(response: 200, description: 'Success'),
         ]
     )]
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 15);
-        return response()->json(
+        $perPage = min((int) $request->input('per_page', 15), 100);
+
+        return OrderResource::collection(
             $this->orderRepository->paginate($perPage)
+        );
+    }
+
+    #[OA\Get(
+        path: '/api/orders/all',
+        summary: 'Get all Orders with cursor pagination (for bulk fetch)',
+        tags: ['Orders'],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 500)),
+            new OA\Parameter(name: 'cursor', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
+        ],
+        servers: [new OA\Server(url: '/')],
+        responses: [
+            new OA\Response(response: 200, description: 'Success with cursor pagination'),
+        ]
+    )]
+    public function all(Request $request)
+    {
+        $perPage = min((int) $request->input('per_page', 500), 1000);
+
+        return OrderResource::collection(
+            $this->orderRepository->cursorPaginate($perPage)
         );
     }
 

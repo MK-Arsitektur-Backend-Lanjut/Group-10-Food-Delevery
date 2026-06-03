@@ -902,6 +902,44 @@
                 ]
             }
         },
+        "/api/orders/all": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get all Orders with cursor pagination (for bulk fetch)",
+                "operationId": "f019da75318eb126e94b0b22049cbbc2",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 500
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success with cursor pagination"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
         "/api/orders/{id}": {
             "get": {
                 "tags": [
