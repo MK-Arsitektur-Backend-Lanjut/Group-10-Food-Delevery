@@ -17,6 +17,26 @@ class OrderController extends Controller
         $this->orderRepository = $orderRepository;
     }
 
+    #[OA\Get(
+        path: '/api/orders',
+        summary: 'Get all Orders (with pagination)',
+        tags: ['Orders'],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 15))
+        ],
+        servers: [new OA\Server(url: '/')],
+        responses: [
+            new OA\Response(response: 200, description: 'Success')
+        ]
+    )]
+    public function index(Request $request)
+    {
+        $perPage = $request->input('per_page', 15);
+        return response()->json(
+            $this->orderRepository->paginate($perPage)
+        );
+    }
+
     #[OA\Post(
         path: '/api/orders',
         summary: 'Create Order',
