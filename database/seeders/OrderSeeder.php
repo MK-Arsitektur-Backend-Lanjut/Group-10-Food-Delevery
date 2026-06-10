@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\DeliveryHistory;
 use App\Models\Driver;
 use App\Models\Order;
+use App\Models\Restaurant;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class OrderSeeder extends Seeder
@@ -14,20 +16,20 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        if (\App\Models\Driver::count() === 0) {
-            \App\Models\Driver::factory(50)->create();
+        if (Driver::count() === 0) {
+            Driver::factory(50)->create();
         }
-        if (\App\Models\User::count() === 0) {
-            \App\Models\User::factory(100)->create();
+        if (User::count() === 0) {
+            User::factory(100)->create();
         }
-        if (\App\Models\Restaurant::count() === 0) {
-            \App\Models\Restaurant::factory(20)->create();
+        if (Restaurant::count() === 0) {
+            Restaurant::factory(20)->create();
         }
 
-        $userIds = \App\Models\User::pluck('id')->toArray();
-        $restaurantIds = \App\Models\Restaurant::pluck('id')->toArray();
-        $driverIds = \App\Models\Driver::pluck('id')->toArray();
-        
+        $userIds = User::pluck('id')->toArray();
+        $restaurantIds = Restaurant::pluck('id')->toArray();
+        $driverIds = Driver::pluck('id')->toArray();
+
         $statuses = ['DIPESAN', 'DIMASAK', 'DIANTAR', 'SELESAI'];
 
         $totalOrders = 10000;
@@ -38,7 +40,7 @@ class OrderSeeder extends Seeder
 
         for ($i = 0; $i < $totalOrders; $i += $chunkSize) {
             $orders = [];
-            
+
             for ($j = 0; $j < $chunkSize; $j++) {
                 $orders[] = [
                     'user_id' => $userIds[array_rand($userIds)],
@@ -54,12 +56,12 @@ class OrderSeeder extends Seeder
             Order::insert($orders);
         }
 
-        $this->command->info("Menyisipkan riwayat pengiriman...");
+        $this->command->info('Menyisipkan riwayat pengiriman...');
 
         // Ambil ID dari 10.000 order terakhir
         Order::latest('id')->take($totalOrders)->chunkById(1000, function ($orders) use ($driverIds, $now) {
             $deliveryHistories = [];
-            
+
             foreach ($orders as $order) {
                 $deliveryHistories[] = [
                     'driver_id' => $driverIds[array_rand($driverIds)],
@@ -69,7 +71,7 @@ class OrderSeeder extends Seeder
                     'updated_at' => clone $now,
                 ];
             }
-            
+
             DeliveryHistory::insert($deliveryHistories);
         });
 

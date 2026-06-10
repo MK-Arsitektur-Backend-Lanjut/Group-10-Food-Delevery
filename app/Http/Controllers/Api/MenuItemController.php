@@ -16,19 +16,19 @@ class MenuItemController extends Controller
 {
     use ApiResponseHelper;
 
-    public function __construct(protected MenuItemService $menuItemService)
-    {
-    }
+    public function __construct(protected MenuItemService $menuItemService) {}
 
     #[OA\Get(
         path: '/restaurants/{restaurant}/menus',
         summary: 'Get all menu items for a restaurant',
         tags: ['Menu Items'],
         parameters: [
-            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 1)),
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 15)),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Successful operation')
+            new OA\Response(response: 200, description: 'Successful operation'),
         ]
     )]
     public function index(Request $request, int $restaurantId): JsonResponse
@@ -43,8 +43,38 @@ class MenuItemController extends Controller
                 'current_page' => $items->currentPage(),
                 'last_page' => $items->lastPage(),
                 'per_page' => $items->perPage(),
-                'total' => $items->total()
-            ]
+                'total' => $items->total(),
+            ],
+        ]);
+    }
+
+    #[OA\Get(
+        path: '/restaurants/{restaurant}/menus/all',
+        summary: 'Get all menu items with cursor pagination (for bulk fetch)',
+        tags: ['Menu Items'],
+        parameters: [
+            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 500)),
+            new OA\Parameter(name: 'cursor', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Successful operation'),
+        ]
+    )]
+    public function all(Request $request, int $restaurantId): JsonResponse
+    {
+        $perPage = min((int) $request->input('per_page', 500), 1000);
+        $items = $this->menuItemService->bulkListByRestaurant($restaurantId, $request->all(), $perPage);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Menu items bulk retrieved successfully',
+            'data' => MenuItemResource::collection($items),
+            'meta' => [
+                'next_cursor' => $items->nextCursor()?->encode(),
+                'prev_cursor' => $items->previousCursor()?->encode(),
+                'per_page' => $items->perPage(),
+            ],
         ]);
     }
 
@@ -53,14 +83,14 @@ class MenuItemController extends Controller
         summary: 'Create a menu item for a restaurant',
         tags: ['Menu Items'],
         parameters: [
-            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: '#/components/schemas/StoreMenuItemRequest')
         ),
         responses: [
-            new OA\Response(response: 201, description: 'Menu item created successfully')
+            new OA\Response(response: 201, description: 'Menu item created successfully'),
         ]
     )]
     public function store(StoreMenuItemRequest $request, int $restaurantId): JsonResponse
@@ -79,10 +109,10 @@ class MenuItemController extends Controller
         summary: 'Get menu item details',
         tags: ['Menu Items'],
         parameters: [
-            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Successful operation')
+            new OA\Response(response: 200, description: 'Successful operation'),
         ]
     )]
     public function show(int $id): JsonResponse
@@ -100,14 +130,14 @@ class MenuItemController extends Controller
         summary: 'Update a menu item',
         tags: ['Menu Items'],
         parameters: [
-            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: '#/components/schemas/UpdateMenuItemRequest')
         ),
         responses: [
-            new OA\Response(response: 200, description: 'Successful operation')
+            new OA\Response(response: 200, description: 'Successful operation'),
         ]
     )]
     public function update(UpdateMenuItemRequest $request, int $id): JsonResponse
@@ -125,14 +155,14 @@ class MenuItemController extends Controller
         summary: 'Update menu item availability',
         tags: ['Menu Items'],
         parameters: [
-            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: '#/components/schemas/UpdateMenuAvailabilityRequest')
         ),
         responses: [
-            new OA\Response(response: 200, description: 'Menu item availability updated successfully')
+            new OA\Response(response: 200, description: 'Menu item availability updated successfully'),
         ]
     )]
     public function updateAvailability(UpdateMenuAvailabilityRequest $request, int $id): JsonResponse
@@ -150,10 +180,10 @@ class MenuItemController extends Controller
         summary: 'Delete a menu item',
         tags: ['Menu Items'],
         parameters: [
-            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'menu', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Successful operation')
+            new OA\Response(response: 200, description: 'Successful operation'),
         ]
     )]
     public function destroy(int $id): JsonResponse

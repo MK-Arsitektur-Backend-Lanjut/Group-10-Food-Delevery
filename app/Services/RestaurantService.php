@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Restaurant;
 use App\Repositories\Contracts\RestaurantRepositoryInterface;
 use App\Repositories\Contracts\RestaurantStatusLogRepositoryInterface;
-use App\Models\Restaurant;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,11 @@ class RestaurantService
     public function list(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
         return $this->restaurantRepo->paginate($filters, $perPage);
+    }
+
+    public function bulkList(array $filters = [], int $perPage = 500): CursorPaginator
+    {
+        return $this->restaurantRepo->cursorPaginate($filters, $perPage);
     }
 
     public function findOrFail(int $id): Restaurant

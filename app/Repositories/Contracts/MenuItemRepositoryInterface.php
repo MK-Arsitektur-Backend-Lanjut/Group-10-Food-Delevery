@@ -3,12 +3,15 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\MenuItem;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 interface MenuItemRepositoryInterface
 {
     public function getByRestaurant(int $restaurantId, array $filters = []): LengthAwarePaginator;
+
+    public function cursorPaginateByRestaurant(int $restaurantId, array $filters = [], int $perPage = 500): CursorPaginator;
 
     public function findById(int $id): ?MenuItem;
 

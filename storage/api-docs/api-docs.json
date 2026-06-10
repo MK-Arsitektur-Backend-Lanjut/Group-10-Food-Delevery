@@ -81,6 +81,28 @@
                 }
             }
         },
+        "/api/v1/load-test/results": {
+            "get": {
+                "tags": [
+                    "Load Testing"
+                ],
+                "summary": "Get the latest K6 Load Test Results",
+                "operationId": "71a21544dc923e8842f3d59ac0d17d03",
+                "responses": {
+                    "200": {
+                        "description": "Load Test Results Data"
+                    },
+                    "404": {
+                        "description": "No test results found"
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
         "/restaurants/{restaurant}/categories": {
             "get": {
                 "tags": [
@@ -95,6 +117,24 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
                         }
                     }
                 ],
@@ -133,6 +173,47 @@
                 "responses": {
                     "201": {
                         "description": "Menu category created successfully"
+                    }
+                }
+            }
+        },
+        "/restaurants/{restaurant}/categories/all": {
+            "get": {
+                "tags": [
+                    "Menu Categories"
+                ],
+                "summary": "Get all categories with cursor pagination (for bulk fetch)",
+                "operationId": "d3b2313cbae4de3e8f6172fa35cb8f27",
+                "parameters": [
+                    {
+                        "name": "restaurant",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 500
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     }
                 }
             }
@@ -230,6 +311,24 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
                     }
                 ],
                 "responses": {
@@ -267,6 +366,47 @@
                 "responses": {
                     "201": {
                         "description": "Menu item created successfully"
+                    }
+                }
+            }
+        },
+        "/restaurants/{restaurant}/menus/all": {
+            "get": {
+                "tags": [
+                    "Menu Items"
+                ],
+                "summary": "Get all menu items with cursor pagination (for bulk fetch)",
+                "operationId": "19f340f913d98235e078cc6683c26fcc",
+                "parameters": [
+                    {
+                        "name": "restaurant",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 500
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     }
                 }
             }
@@ -390,6 +530,26 @@
                 ],
                 "summary": "Get list of restaurants",
                 "operationId": "c2732fde08b6fb1b998768e0212d072a",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -415,6 +575,39 @@
                 "responses": {
                     "201": {
                         "description": "Restaurant created successfully"
+                    }
+                }
+            }
+        },
+        "/restaurants/all": {
+            "get": {
+                "tags": [
+                    "Restaurants"
+                ],
+                "summary": "Get all restaurants with cursor pagination (for bulk fetch)",
+                "operationId": "b3a0c5824e366a4473f19f3b4065147b",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 500
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     }
                 }
             }
@@ -516,6 +709,26 @@
                 ],
                 "summary": "Get list of drivers",
                 "operationId": "90f1e2d7ba23baa1e136288ed235666c",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -560,6 +773,54 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Driver"
+                                }
+                            }
+                        }
+                    }
+                },
+                "servers": [
+                    {
+                        "url": "/"
+                    }
+                ]
+            }
+        },
+        "/api/drivers/all": {
+            "get": {
+                "tags": [
+                    "Drivers"
+                ],
+                "summary": "Get all drivers with cursor pagination (for bulk fetch)",
+                "operationId": "176d6eff22ca42ff68a6ff9125c93aad",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 500
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Driver"
+                                    }
                                 }
                             }
                         }
@@ -686,6 +947,26 @@
                 ],
                 "summary": "Get available drivers",
                 "operationId": "cd03eca28abe5b326e6e0ea68287161c",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Success",
@@ -722,6 +1003,24 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
                         }
                     }
                 ],
@@ -1644,6 +1943,10 @@
         {
             "name": "Internal Integration",
             "description": "Internal Integration"
+        },
+        {
+            "name": "Load Testing",
+            "description": "Load Testing"
         },
         {
             "name": "Menu Categories",

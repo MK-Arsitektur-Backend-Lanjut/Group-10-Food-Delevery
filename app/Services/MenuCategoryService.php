@@ -5,7 +5,8 @@ namespace App\Services;
 use App\Models\MenuCategory;
 use App\Repositories\Contracts\MenuCategoryRepositoryInterface;
 use App\Repositories\Contracts\RestaurantRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MenuCategoryService
 {
@@ -14,11 +15,18 @@ class MenuCategoryService
         protected RestaurantRepositoryInterface $restaurantRepo,
     ) {}
 
-    public function listByRestaurant(int $restaurantId): Collection
+    public function listByRestaurant(int $restaurantId, int $perPage = 15): LengthAwarePaginator
     {
         $this->ensureRestaurantExists($restaurantId);
 
-        return $this->categoryRepo->getByRestaurant($restaurantId);
+        return $this->categoryRepo->getByRestaurant($restaurantId, $perPage);
+    }
+
+    public function bulkListByRestaurant(int $restaurantId, int $perPage = 500): CursorPaginator
+    {
+        $this->ensureRestaurantExists($restaurantId);
+
+        return $this->categoryRepo->cursorPaginateByRestaurant($restaurantId, $perPage);
     }
 
     public function findOrFail(int $id): MenuCategory

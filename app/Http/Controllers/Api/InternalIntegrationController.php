@@ -10,9 +10,7 @@ use OpenApi\Attributes as OA;
 
 class InternalIntegrationController extends Controller
 {
-    public function __construct(protected MenuValidationService $validationService)
-    {
-    }
+    public function __construct(protected MenuValidationService $validationService) {}
 
     #[OA\Post(
         path: '/internal/order-items/validate',
@@ -31,7 +29,7 @@ class InternalIntegrationController extends Controller
                     properties: [
                         new OA\Property(property: 'valid', type: 'boolean', example: true),
                         new OA\Property(property: 'restaurant', type: 'object'),
-                        new OA\Property(property: 'items', type: 'array', items: new OA\Items(type: 'object'))
+                        new OA\Property(property: 'items', type: 'array', items: new OA\Items(type: 'object')),
                     ]
                 )
             ),
@@ -41,10 +39,10 @@ class InternalIntegrationController extends Controller
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'valid', type: 'boolean', example: false),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(type: 'object'))
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(type: 'object')),
                     ]
                 )
-            )
+            ),
         ]
     )]
     public function validateOrderItems(ValidateOrderItemsRequest $request): JsonResponse

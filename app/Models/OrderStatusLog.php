@@ -8,6 +8,6 @@ class OrderStatusLog extends Model
 {
     protected $fillable = [
         'order_id',
-        'status'
+        'status',
     ];
 }

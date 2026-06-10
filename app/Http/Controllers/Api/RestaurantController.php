@@ -16,22 +16,24 @@ class RestaurantController extends Controller
 {
     use ApiResponseHelper;
 
-    public function __construct(protected RestaurantService $restaurantService)
-    {
-    }
+    public function __construct(protected RestaurantService $restaurantService) {}
 
     #[OA\Get(
         path: '/restaurants',
         summary: 'Get list of restaurants',
         tags: ['Restaurants'],
+        parameters: [
+            new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 1)),
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 15)),
+        ],
         responses: [
-            new OA\Response(response: 200, description: 'Successful operation')
+            new OA\Response(response: 200, description: 'Successful operation'),
         ]
     )]
     public function index(Request $request): JsonResponse
     {
         $restaurants = $this->restaurantService->list($request->all(), $request->input('per_page', 15));
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Restaurants retrieved successfully',
@@ -40,8 +42,37 @@ class RestaurantController extends Controller
                 'current_page' => $restaurants->currentPage(),
                 'last_page' => $restaurants->lastPage(),
                 'per_page' => $restaurants->perPage(),
-                'total' => $restaurants->total()
-            ]
+                'total' => $restaurants->total(),
+            ],
+        ]);
+    }
+
+    #[OA\Get(
+        path: '/restaurants/all',
+        summary: 'Get all restaurants with cursor pagination (for bulk fetch)',
+        tags: ['Restaurants'],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 500)),
+            new OA\Parameter(name: 'cursor', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Successful operation'),
+        ]
+    )]
+    public function all(Request $request): JsonResponse
+    {
+        $perPage = min((int) $request->input('per_page', 500), 1000);
+        $restaurants = $this->restaurantService->bulkList($request->all(), $perPage);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Restaurants bulk retrieved successfully',
+            'data' => RestaurantResource::collection($restaurants),
+            'meta' => [
+                'next_cursor' => $restaurants->nextCursor()?->encode(),
+                'prev_cursor' => $restaurants->previousCursor()?->encode(),
+                'per_page' => $restaurants->perPage(),
+            ],
         ]);
     }
 
@@ -54,7 +85,7 @@ class RestaurantController extends Controller
             content: new OA\JsonContent(ref: '#/components/schemas/StoreRestaurantRequest')
         ),
         responses: [
-            new OA\Response(response: 201, description: 'Restaurant created successfully')
+            new OA\Response(response: 201, description: 'Restaurant created successfully'),
         ]
     )]
     public function store(StoreRestaurantRequest $request): JsonResponse
@@ -73,10 +104,10 @@ class RestaurantController extends Controller
         summary: 'Get restaurant details',
         tags: ['Restaurants'],
         parameters: [
-            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Successful operation')
+            new OA\Response(response: 200, description: 'Successful operation'),
         ]
     )]
     public function show(int $id): JsonResponse
@@ -94,14 +125,14 @@ class RestaurantController extends Controller
         summary: 'Update an existing restaurant',
         tags: ['Restaurants'],
         parameters: [
-            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: '#/components/schemas/UpdateRestaurantRequest')
         ),
         responses: [
-            new OA\Response(response: 200, description: 'Restaurant updated successfully')
+            new OA\Response(response: 200, description: 'Restaurant updated successfully'),
         ]
     )]
     public function update(UpdateRestaurantRequest $request, int $id): JsonResponse
@@ -119,14 +150,14 @@ class RestaurantController extends Controller
         summary: 'Update restaurant operational status',
         tags: ['Restaurants'],
         parameters: [
-            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer'))
+            new OA\Parameter(name: 'restaurant', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(ref: '#/components/schemas/UpdateRestaurantOperationalStatusRequest')
         ),
         responses: [
-            new OA\Response(response: 200, description: 'Restaurant operational status updated successfully')
+            new OA\Response(response: 200, description: 'Restaurant operational status updated successfully'),
         ]
     )]
     public function updateOperationalStatus(UpdateRestaurantOperationalStatusRequest $request, int $id): JsonResponse

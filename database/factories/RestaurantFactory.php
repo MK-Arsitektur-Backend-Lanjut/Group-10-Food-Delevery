@@ -10,7 +10,7 @@ class RestaurantFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company() . ' Restaurant',
+            'name' => $this->faker->company().' Restaurant',
             'description' => $this->faker->paragraph(),
             'address' => $this->faker->address(),
             'phone' => $this->faker->phoneNumber(),

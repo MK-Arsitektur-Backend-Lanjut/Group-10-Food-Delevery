@@ -76,7 +76,7 @@ it('caps per_page to 10000 for cursor pagination', function () {
     Order::factory()->count(10)->create();
 
     $response = $this->getJson('/api/orders/all?per_page=15000');
-    
+
     $response->assertStatus(200);
     // Jika ada 10 data, harusnya balik 10
     expect(count($response->json('data')))->toBe(10);

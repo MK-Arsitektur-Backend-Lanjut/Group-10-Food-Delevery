@@ -4,7 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\MenuCategory;
 use App\Repositories\Contracts\MenuCategoryRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\CursorPaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EloquentMenuCategoryRepository implements MenuCategoryRepositoryInterface
 {
@@ -12,13 +13,22 @@ class EloquentMenuCategoryRepository implements MenuCategoryRepositoryInterface
         protected MenuCategory $model,
     ) {}
 
-    public function getByRestaurant(int $restaurantId): Collection
+    public function getByRestaurant(int $restaurantId, int $perPage = 15): LengthAwarePaginator
     {
         return $this->model
             ->where('restaurant_id', $restaurantId)
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get();
+            ->paginate($perPage);
+    }
+
+    public function cursorPaginateByRestaurant(int $restaurantId, int $perPage = 500): CursorPaginator
+    {
+        return $this->model
+            ->where('restaurant_id', $restaurantId)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->cursorPaginate($perPage);
     }
 
     public function findById(int $id): ?MenuCategory

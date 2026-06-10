@@ -6,6 +6,7 @@ use App\Models\MenuItem;
 use App\Repositories\Contracts\MenuCategoryRepositoryInterface;
 use App\Repositories\Contracts\MenuItemRepositoryInterface;
 use App\Repositories\Contracts\RestaurantRepositoryInterface;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class MenuItemService
@@ -21,6 +22,13 @@ class MenuItemService
         $this->ensureRestaurantExists($restaurantId);
 
         return $this->menuItemRepo->getByRestaurant($restaurantId, $filters);
+    }
+
+    public function bulkListByRestaurant(int $restaurantId, array $filters = [], int $perPage = 500): CursorPaginator
+    {
+        $this->ensureRestaurantExists($restaurantId);
+
+        return $this->menuItemRepo->cursorPaginateByRestaurant($restaurantId, $filters, $perPage);
     }
 
     public function findOrFail(int $id): MenuItem

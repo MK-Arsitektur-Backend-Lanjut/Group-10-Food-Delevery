@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\Restaurant;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface RestaurantRepositoryInterface
@@ -18,4 +19,6 @@ interface RestaurantRepositoryInterface
     public function updateOperationalStatus(int $id, bool $isOpen): Restaurant;
 
     public function paginate(array $filters = [], int $perPage = 15): LengthAwarePaginator;
+
+    public function cursorPaginate(array $filters = [], int $perPage = 500): CursorPaginator;
 }

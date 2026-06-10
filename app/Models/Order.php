@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'restaurant_id',
         'driver_id',
         'status',
         'total_price',
-        'total'
+        'total',
     ];
 
     public function user()
@@ -26,5 +27,4 @@ class Order extends Model
     {
         return $this->hasMany(DeliveryHistory::class);
     }
-
 }

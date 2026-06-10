@@ -2,14 +2,19 @@
 
 namespace App\Repositories;
 
-use App\Models\Driver;
 use App\Models\DeliveryHistory;
+use App\Models\Driver;
 
 class DriverRepository implements DriverRepositoryInterface
 {
-    public function all()
+    public function all(int $perPage = 15)
     {
-        return Driver::all();
+        return Driver::paginate($perPage);
+    }
+
+    public function cursorPaginate(int $perPage = 500)
+    {
+        return Driver::orderBy('id')->cursorPaginate($perPage);
     }
 
     public function find($id)
@@ -26,6 +31,7 @@ class DriverRepository implements DriverRepositoryInterface
     {
         $driver = Driver::findOrFail($id);
         $driver->update($data);
+
         return $driver;
     }
 
@@ -35,14 +41,14 @@ class DriverRepository implements DriverRepositoryInterface
         $driver->delete();
     }
 
-    public function getAvailableDrivers()
+    public function getAvailableDrivers(int $perPage = 15)
     {
-        return Driver::where('status', 'available')->get();
+        return Driver::where('status', 'available')->paginate($perPage);
     }
 
-    public function getDriverHistory($driverId)
+    public function getDriverHistory($driverId, int $perPage = 15)
     {
         // Asumsi DeliveryHistory memiliki relasi dengan Driver dan Order
-        return DeliveryHistory::where('driver_id', $driverId)->with('order')->get();
+        return DeliveryHistory::where('driver_id', $driverId)->with('order')->paginate($perPage);
     }
 }

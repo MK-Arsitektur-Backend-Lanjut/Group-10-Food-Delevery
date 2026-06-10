@@ -36,7 +36,7 @@ class MenuItem extends Model
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Relationships                                                      */
+    /*  Relationships */
     /* ------------------------------------------------------------------ */
 
     public function restaurant(): BelongsTo

@@ -14,7 +14,7 @@ it('can fetch menu categories for a restaurant', function () {
     $response = $this->getJson("/api/v1/restaurants/{$restaurant->id}/categories");
 
     $response->assertStatus(200)
-             ->assertJsonCount(3, 'data');
+        ->assertJsonCount(3, 'data');
 });
 
 it('can create a menu item with valid category', function () {
@@ -31,13 +31,13 @@ it('can create a menu item with valid category', function () {
     $response = $this->postJson("/api/v1/restaurants/{$restaurant->id}/menus", $data);
 
     $response->assertStatus(201)
-             ->assertJsonPath('data.name', 'Nasi Bakar');
+        ->assertJsonPath('data.name', 'Nasi Bakar');
 });
 
 it('prevents creating menu item with wrong restaurant category', function () {
     $restaurant1 = Restaurant::factory()->create();
     $restaurant2 = Restaurant::factory()->create();
-    
+
     // Category belongs to restaurant 2
     $category = MenuCategory::factory()->create(['restaurant_id' => $restaurant2->id]);
 
@@ -57,9 +57,9 @@ it('can update menu item availability', function () {
     $item = MenuItem::factory()->create(['is_available' => false]);
 
     $response = $this->patchJson("/api/v1/menus/{$item->id}/availability", [
-        'is_available' => true
+        'is_available' => true,
     ]);
 
     $response->assertStatus(200)
-             ->assertJsonPath('data.is_available', true);
+        ->assertJsonPath('data.is_available', true);
 });

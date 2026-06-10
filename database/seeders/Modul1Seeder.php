@@ -15,7 +15,7 @@ class Modul1Seeder extends Seeder
         DB::transaction(function () {
             // Seed 30 realistic restaurants
             Restaurant::factory(30)->create()->each(function (Restaurant $restaurant) {
-                
+
                 // Each restaurant has 3-5 categories
                 $categories = MenuCategory::factory(rand(3, 5))->create([
                     'restaurant_id' => $restaurant->id,

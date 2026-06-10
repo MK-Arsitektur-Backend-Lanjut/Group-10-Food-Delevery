@@ -19,6 +19,7 @@ Route::prefix('drivers')->group(function () {
     Route::post('register', [DriverController::class, 'register']);
     Route::middleware('auth:api')->group(function () {
         Route::get('/', [DriverController::class, 'index']);
+        Route::get('all', [DriverController::class, 'all']);
         Route::post('/', [DriverController::class, 'store']);
         Route::get('available', [DriverController::class, 'available']);
         Route::get('{id}', [DriverController::class, 'show']);
@@ -38,10 +39,12 @@ Route::patch('/orders/{id}/status', [OrderController::class, 'updateStatus']);
 // Restaurant & Menu Routes (Modul 1)
 Route::prefix('v1')->group(function () {
     // Restaurants
+    Route::get('restaurants/all', [RestaurantController::class, 'all']);
     Route::apiResource('restaurants', RestaurantController::class);
     Route::patch('restaurants/{restaurant}/operational-status', [RestaurantController::class, 'updateOperationalStatus']);
 
     // Menu Categories (nested under restaurant for list/create, isolated for direct manip)
+    Route::get('restaurants/{restaurant}/categories/all', [MenuCategoryController::class, 'all']);
     Route::get('restaurants/{restaurant}/categories', [MenuCategoryController::class, 'index']);
     Route::post('restaurants/{restaurant}/categories', [MenuCategoryController::class, 'store']);
     Route::get('categories/{category}', [MenuCategoryController::class, 'show']);
@@ -49,6 +52,7 @@ Route::prefix('v1')->group(function () {
     Route::delete('categories/{category}', [MenuCategoryController::class, 'destroy']);
 
     // Menu Items
+    Route::get('restaurants/{restaurant}/menus/all', [MenuItemController::class, 'all']);
     Route::get('restaurants/{restaurant}/menus', [MenuItemController::class, 'index']);
     Route::post('restaurants/{restaurant}/menus', [MenuItemController::class, 'store']);
     Route::get('menus/{menu}', [MenuItemController::class, 'show']);
@@ -60,4 +64,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('internal')->group(function () {
         Route::post('order-items/validate', [InternalIntegrationController::class, 'validateOrderItems']);
     });
+
+    // Load Test Results
+    Route::get('load-test/results', [\App\Http\Controllers\Api\LoadTestController::class, 'results']);
 });

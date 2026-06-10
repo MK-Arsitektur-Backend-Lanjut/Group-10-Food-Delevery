@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Restaurant;
 use App\Repositories\Contracts\RestaurantRepositoryInterface;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EloquentRestaurantRepository implements RestaurantRepositoryInterface
@@ -61,10 +62,29 @@ class EloquentRestaurantRepository implements RestaurantRepositoryInterface
         if (isset($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('name', 'like', "%{$filters['search']}%")
-                  ->orWhere('address', 'like', "%{$filters['search']}%");
+                    ->orWhere('address', 'like', "%{$filters['search']}%");
             });
         }
 
         return $query->latest()->paginate($perPage);
+    }
+
+    public function cursorPaginate(array $filters = [], int $perPage = 500): CursorPaginator
+    {
+        $query = $this->model->query();
+
+        if (isset($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (isset($filters['is_open'])) {
+            $query->where('is_open', $filters['is_open']);
+        }
+
+        if (isset($filters['search'])) {
+            $query->where('name', 'like', "%{$filters['search']}%");
+        }
+
+        return $query->orderBy('id')->cursorPaginate($perPage);
     }
 }

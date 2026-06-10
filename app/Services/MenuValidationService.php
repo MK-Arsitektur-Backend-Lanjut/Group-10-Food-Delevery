@@ -79,6 +79,7 @@ class MenuValidationService
                     'code' => 'ITEM_NOT_FOUND',
                     'message' => "Menu item #{$menuItemId} not found in this restaurant",
                 ];
+
                 continue;
             }
 
@@ -89,6 +90,7 @@ class MenuValidationService
                     'code' => 'ITEM_RESTAURANT_MISMATCH',
                     'message' => "Menu item #{$menuItemId} does not belong to this restaurant",
                 ];
+
                 continue;
             }
 
@@ -97,6 +99,7 @@ class MenuValidationService
                     'code' => 'ITEM_INACTIVE',
                     'message' => "Menu item '{$item->name}' is currently inactive",
                 ];
+
                 continue;
             }
 
@@ -105,6 +108,7 @@ class MenuValidationService
                     'code' => 'ITEM_NOT_AVAILABLE',
                     'message' => "Menu item '{$item->name}' is currently unavailable",
                 ];
+
                 continue;
             }
 
@@ -131,7 +135,7 @@ class MenuValidationService
     /**
      * Merge duplicate menu_item_ids by summing qty.
      *
-     * @return array<int, int>  [menu_item_id => total_qty]
+     * @return array<int, int> [menu_item_id => total_qty]
      */
     protected function normalizeItems(array $items): array
     {

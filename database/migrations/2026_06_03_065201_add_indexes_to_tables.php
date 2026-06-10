@@ -15,37 +15,43 @@ return new class extends Migration
             Schema::table('orders', function (Blueprint $table) {
                 $table->index('status');
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         try {
             Schema::table('orders', function (Blueprint $table) {
                 $table->index('created_at');
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         try {
             Schema::table('menu_items', function (Blueprint $table) {
                 $table->index('is_active');
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         try {
             Schema::table('menu_items', function (Blueprint $table) {
                 $table->index('is_available');
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         try {
             Schema::table('restaurants', function (Blueprint $table) {
                 $table->index('is_open');
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         try {
             Schema::table('restaurants', function (Blueprint $table) {
                 $table->index('status');
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
     }
 
     /**
@@ -57,33 +63,39 @@ return new class extends Migration
             Schema::table('restaurants', function (Blueprint $table) {
                 $table->dropIndex(['is_open']);
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
         try {
             Schema::table('restaurants', function (Blueprint $table) {
                 $table->dropIndex(['status']);
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         try {
             Schema::table('menu_items', function (Blueprint $table) {
                 $table->dropIndex(['is_active']);
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
         try {
             Schema::table('menu_items', function (Blueprint $table) {
                 $table->dropIndex(['is_available']);
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         try {
             Schema::table('orders', function (Blueprint $table) {
                 $table->dropIndex(['status']);
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
         try {
             Schema::table('orders', function (Blueprint $table) {
                 $table->dropIndex(['created_at']);
             });
-        } catch (\Exception $e) {}
+        } catch (Exception $e) {
+        }
     }
 };

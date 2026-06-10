@@ -36,7 +36,7 @@ class Restaurant extends Model
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Relationships                                                      */
+    /*  Relationships */
     /* ------------------------------------------------------------------ */
 
     public function menuCategories(): HasMany
@@ -55,7 +55,7 @@ class Restaurant extends Model
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Helpers                                                            */
+    /*  Helpers */
     /* ------------------------------------------------------------------ */
 
     public function isActive(): bool
