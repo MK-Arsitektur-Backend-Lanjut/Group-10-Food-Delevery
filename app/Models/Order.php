@@ -2,15 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
- protected $fillable = [
-    'user_id',
-    'restaurant_id',
-    'driver_id',
-    'status',
-    'total_price'
-];
+    use HasFactory;
+    protected $fillable = [
+        'user_id',
+        'restaurant_id',
+        'driver_id',
+        'status',
+        'total_price',
+        'total'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function deliveryHistories()
+    {
+        return $this->hasMany(DeliveryHistory::class);
+    }
+
 }
