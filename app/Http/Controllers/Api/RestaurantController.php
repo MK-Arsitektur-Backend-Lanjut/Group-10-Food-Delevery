@@ -30,21 +30,31 @@ class RestaurantController extends Controller
             new OA\Response(response: 200, description: 'Successful operation'),
         ]
     )]
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): \Illuminate\Http\Response
     {
-        $restaurants = $this->restaurantService->list($request->all(), $request->input('per_page', 15));
+        $filters = $request->all();
+        $perPage = $request->input('per_page', 15);
+        $page = $request->input('page', 1);
+        
+        $cacheKey = 'restaurants_json_' . md5(json_encode($filters) . '_' . $perPage . '_' . $page);
+        
+        $responseData = \Illuminate\Support\Facades\Cache::remember($cacheKey, 60, function () use ($filters, $perPage) {
+            $restaurants = $this->restaurantService->list($filters, $perPage);
+            
+            return json_encode([
+                'success' => true,
+                'message' => 'Restaurants retrieved successfully',
+                'data' => RestaurantResource::collection($restaurants),
+                'meta' => [
+                    'current_page' => $restaurants->currentPage(),
+                    'last_page' => $restaurants->lastPage(),
+                    'per_page' => $restaurants->perPage(),
+                    'total' => $restaurants->total(),
+                ],
+            ]);
+        });
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Restaurants retrieved successfully',
-            'data' => RestaurantResource::collection($restaurants),
-            'meta' => [
-                'current_page' => $restaurants->currentPage(),
-                'last_page' => $restaurants->lastPage(),
-                'per_page' => $restaurants->perPage(),
-                'total' => $restaurants->total(),
-            ],
-        ]);
+        return response($responseData, 200, ['Content-Type' => 'application/json']);
     }
 
     #[OA\Get(

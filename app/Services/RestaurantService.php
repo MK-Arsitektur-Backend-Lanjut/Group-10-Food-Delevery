@@ -18,7 +18,11 @@ class RestaurantService
 
     public function list(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        return $this->restaurantRepo->paginate($filters, $perPage);
+        $cacheKey = 'restaurants_list_' . md5(json_encode($filters) . '_' . $perPage);
+        
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 60, function () use ($filters, $perPage) {
+            return $this->restaurantRepo->paginate($filters, $perPage);
+        });
     }
 
     public function bulkList(array $filters = [], int $perPage = 500): CursorPaginator
