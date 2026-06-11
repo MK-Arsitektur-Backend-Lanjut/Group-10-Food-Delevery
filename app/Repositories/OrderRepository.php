@@ -6,6 +6,28 @@ use App\Models\Order;
 
 class OrderRepository
 {
+    public function paginate(int $perPage = 15)
+    {
+        return Order::select(['id', 'user_id', 'restaurant_id', 'driver_id', 'status', 'total_price', 'created_at'])
+            ->with([
+                'user:id,name',
+                'deliveryHistories:id,order_id,driver_id,delivered_at',
+            ])
+            ->latest()
+            ->paginate($perPage);
+    }
+
+    public function cursorPaginate(int $perPage = 500)
+    {
+        return Order::select(['id', 'user_id', 'restaurant_id', 'driver_id', 'status', 'total_price', 'created_at'])
+            ->with([
+                'user:id,name',
+                'deliveryHistories:id,order_id,driver_id,delivered_at',
+            ])
+            ->orderBy('id')
+            ->cursorPaginate($perPage);
+    }
+
     public function create($data)
     {
         return Order::create($data);
@@ -23,10 +45,12 @@ class OrderRepository
 
         return $order;
     }
+
     public function findByIdWithLock($id)
     {
-    return \App\Models\Order::where('id', $id)
-        ->lockForUpdate()
-        ->firstOrFail();
+        return Order::with(['user', 'deliveryHistories'])
+            ->where('id', $id)
+            ->lockForUpdate()
+            ->firstOrFail();
     }
 }
