@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Models\Driver;
 use App\Models\DeliveryHistory;
+use App\Models\Driver;
 
 class DriverRepository implements DriverRepositoryInterface
 {
     public function all()
     {
-        return Driver::all();
+        return Driver::limit(100)->get();
     }
 
     public function find($id)
@@ -26,6 +26,7 @@ class DriverRepository implements DriverRepositoryInterface
     {
         $driver = Driver::findOrFail($id);
         $driver->update($data);
+
         return $driver;
     }
 
@@ -37,12 +38,12 @@ class DriverRepository implements DriverRepositoryInterface
 
     public function getAvailableDrivers()
     {
-        return Driver::where('status', 'available')->get();
+        return Driver::where('status', 'available')->limit(100)->get();
     }
 
     public function getDriverHistory($driverId)
     {
         // Asumsi DeliveryHistory memiliki relasi dengan Driver dan Order
-        return DeliveryHistory::where('driver_id', $driverId)->with('order')->get();
+        return DeliveryHistory::where('driver_id', $driverId)->with('order')->limit(100)->get();
     }
 }
