@@ -10,13 +10,13 @@ export const options = {
             stages: [
                 { duration: '30s', target: 5000 },   // Naik ke 5.000 user dalam 30 detik
                 { duration: '30s', target: 10000 },  // Naik ke 10.000 user dalam 30 detik
-                { duration: '5m', target: 10000 },   // Bertahan di 10.000 user selama 2 menit
+                { duration: '5m', target: 10000 },   // Bertahan di 10.000 user selama 5 menit
                 { duration: '30s', target: 0 },      // Turun ke 0 (cooldown)
             ],
             gracefulRampDown: '30s',
         },
     },
-    httpTimeout: '300s',
+    discardResponseBodies: true, // Membantu meringankan beban memori dan socket komputer Anda saat test 10rb user
 };
 
 export default function () {
